@@ -57,20 +57,15 @@ const Drawer = (props: Props) => {
   const theme = useTheme()
 
   // ** Vars
-  const { mode, navCollapsed } = settings
+  const { navCollapsed } = settings
 
   const drawerColors = () => {
-    if (mode === 'semi-dark') {
-      return {
-        backgroundColor: 'customColors.darkBg',
-        '& .MuiTypography-root, & svg': {
-          color: `rgba(${theme.palette.customColors.dark}, 0.87)`
-        }
+    return {
+      background: 'linear-gradient(180deg, #e6d8f2 0%, #c8b0e6 100%)',
+      '& .MuiTypography-root, & svg': {
+        color: `rgba(${theme.palette.customColors.dark}, 0.87)`
       }
-    } else
-      return {
-        backgroundColor: 'background.default'
-      }
+    }
   }
 
   // Drawer Props for Mobile & Tablet screens

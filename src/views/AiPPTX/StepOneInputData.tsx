@@ -1,14 +1,16 @@
 // ** React Imports
-import { Fragment, useState } from 'react'
+import { useState } from 'react'
 
 // ** MUI Imports
 import Box from '@mui/material/Box'
-import Grid from '@mui/material/Grid'
 import Button from '@mui/material/Button'
 import Select from '@mui/material/Select'
 import MenuItem from '@mui/material/MenuItem'
 import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
+import Paper from '@mui/material/Paper'
+import Fade from '@mui/material/Fade'
+import { useTheme } from '@mui/material/styles'
 import {
   Description, // 输入主题与要求
   CloudUpload, // 导入外部资料
@@ -19,11 +21,15 @@ import {
   KeyboardArrowDown,
   KeyboardArrowRight,
   PlayCircleFilled, // 立即生成
+  Settings, // 设置图标
+  Language, // 语言图标
+  FormatSize // 篇幅图标
 } from "@mui/icons-material";
 
 
 const StepOneInputData = ({ setActiveStep, setInputData }: any) => {
   // ** States
+  const theme = useTheme();
 
   // 状态管理
   const [selectedOption, setSelectedOption] = useState("inputTopic"); // 默认选中 "输入主题与要求"
@@ -60,14 +66,32 @@ const StepOneInputData = ({ setActiveStep, setInputData }: any) => {
   };
 
   return (
-    <Box sx={{  }}>
+    <Box sx={{ maxWidth: '1200px', mx: 'auto' }}>
       {/* 第一行：两个按钮 */}
-      <Box sx={{ display: "flex", gap: 2, mb: 2 }}>
+      <Paper 
+        elevation={0} 
+        sx={{ 
+          p: 1, 
+          mb: 3, 
+          borderRadius: 2,
+          backgroundColor: theme.palette.background.paper,
+          display: "flex", 
+          gap: 2,
+          justifyContent: "center"
+        }}
+      >
         <Button
           variant={selectedOption === "inputTopic" ? "contained" : "outlined"}
           color={selectedOption === "inputTopic" ? "primary" : "inherit"}
           onClick={() => handleOptionChange("inputTopic")}
-          startIcon={<Description />} // 输入主题与要求图标
+          startIcon={<Description />}
+          sx={{ 
+            borderRadius: 2,
+            px: 3,
+            py: 1,
+            boxShadow: selectedOption === "inputTopic" ? theme.shadows[2] : 'none',
+            transition: 'all 0.3s ease'
+          }}
         >
           输入主题与要求
         </Button>
@@ -75,33 +99,70 @@ const StepOneInputData = ({ setActiveStep, setInputData }: any) => {
           variant={selectedOption === "importData" ? "contained" : "outlined"}
           color={selectedOption === "importData" ? "primary" : "inherit"}
           onClick={() => handleOptionChange("importData")}
-          startIcon={<CloudUpload />} // 导入外部资料图标
+          startIcon={<CloudUpload />}
+          sx={{ 
+            borderRadius: 2,
+            px: 3,
+            py: 1,
+            boxShadow: selectedOption === "importData" ? theme.shadows[2] : 'none',
+            transition: 'all 0.3s ease'
+          }}
         >
-          导入外部资料（网络/文件等）
+          导入外部资料
         </Button>
-      </Box>
+      </Paper>
 
       {/* 第二行：根据选项显示不同内容 */}
-      {selectedOption === "inputTopic" && (
-        <TextField
-          fullWidth
-          label="请输入主题与要求"
-          variant="outlined"
-          value={inputText}
-          onChange={(e) => setInputText(e.target.value)}
-          sx={{ mt: 2, mb: 2 }}
-        />
-      )}
+      <Fade in={selectedOption === "inputTopic"} timeout={500}>
+        <Box sx={{ display: selectedOption === "inputTopic" ? 'block' : 'none' }}>
+          <TextField
+            fullWidth
+            label="请输入主题与要求"
+            variant="outlined"
+            value={inputText}
+            onChange={(e) => setInputText(e.target.value)}
+            sx={{ 
+              mb: 3,
+              '& .MuiOutlinedInput-root': {
+                borderRadius: 2,
+                '&:hover .MuiOutlinedInput-notchedOutline': {
+                  borderColor: theme.palette.primary.light
+                }
+              }
+            }}
+            placeholder="例如：2025年就业市场预测"
+            helperText="输入您想要创建的PPT主题或详细要求"
+          />
+        </Box>
+      </Fade>
 
-      {selectedOption === "importData" && (
-        <>
+      <Fade in={selectedOption === "importData"} timeout={500}>
+        <Box sx={{ display: selectedOption === "importData" ? 'block' : 'none' }}>
           {/* 四个按钮 */}
-          <Box sx={{ display: "flex", gap: 2, mb: 2, mt: 4 }}>
+          <Paper 
+            elevation={0} 
+            sx={{ 
+              p: 1.5, 
+              mb: 3, 
+              borderRadius: 2,
+              backgroundColor: theme.palette.background.paper,
+              display: "flex", 
+              flexWrap: "wrap",
+              gap: 2,
+              justifyContent: "center"
+            }}
+          >
             <Button
               variant={importOption === "inputText" ? "contained" : "outlined"}
               color={importOption === "inputText" ? "primary" : "inherit"}
               onClick={() => handleImportOptionChange("inputText")}
               startIcon={<TextFields />}
+              sx={{ 
+                borderRadius: 2,
+                px: 2,
+                boxShadow: importOption === "inputText" ? theme.shadows[2] : 'none',
+                transition: 'all 0.3s ease'
+              }}
             >
               输入文本
             </Button>
@@ -110,6 +171,12 @@ const StepOneInputData = ({ setActiveStep, setInputData }: any) => {
               color={importOption === "uploadFile" ? "primary" : "inherit"}
               onClick={() => handleImportOptionChange("uploadFile")}
               startIcon={<UploadFile />}
+              sx={{ 
+                borderRadius: 2,
+                px: 2,
+                boxShadow: importOption === "uploadFile" ? theme.shadows[2] : 'none',
+                transition: 'all 0.3s ease'
+              }}
             >
               上传文件
             </Button>
@@ -118,6 +185,12 @@ const StepOneInputData = ({ setActiveStep, setInputData }: any) => {
               color={importOption === "inputUrl" ? "primary" : "inherit"}
               onClick={() => handleImportOptionChange("inputUrl")}
               startIcon={<Link />}
+              sx={{ 
+                borderRadius: 2,
+                px: 2,
+                boxShadow: importOption === "inputUrl" ? theme.shadows[2] : 'none',
+                transition: 'all 0.3s ease'
+              }}
             >
               输入网页地址
             </Button>
@@ -126,122 +199,280 @@ const StepOneInputData = ({ setActiveStep, setInputData }: any) => {
               color={importOption === "importOutline" ? "primary" : "inherit"}
               onClick={() => handleImportOptionChange("importOutline")}
               startIcon={<List />}
+              sx={{ 
+                borderRadius: 2,
+                px: 2,
+                boxShadow: importOption === "importOutline" ? theme.shadows[2] : 'none',
+                transition: 'all 0.3s ease'
+              }}
             >
               导入大纲
             </Button>
-          </Box>
+          </Paper>
 
           {/* 动态显示输入框 */}
-          {importOption === "inputText" && (
-            <TextField
-              fullWidth
-              label="请输入文本"
-              variant="outlined"
-              multiline
-              rows={4}
-              value={inputText}
-              onChange={(e) => setInputText(e.target.value)}
-              sx={{ mb: 2, mt: 2 }}
-            />
-          )}
+          <Fade in={importOption === "inputText"} timeout={500}>
+            <Box sx={{ display: importOption === "inputText" ? 'block' : 'none' }}>
+              <TextField
+                fullWidth
+                label="请输入文本"
+                variant="outlined"
+                multiline
+                rows={4}
+                value={inputText}
+                onChange={(e) => setInputText(e.target.value)}
+                sx={{ 
+                  mb: 3,
+                  '& .MuiOutlinedInput-root': {
+                    borderRadius: 2,
+                    '&:hover .MuiOutlinedInput-notchedOutline': {
+                      borderColor: theme.palette.primary.light
+                    }
+                  }
+                }}
+                placeholder="粘贴您的文本内容..."
+                helperText="系统将基于此文本内容生成PPT大纲"
+              />
+            </Box>
+          </Fade>
 
-          {importOption === "inputUrl" && (
-            <TextField
-              fullWidth
-              label="请输入网页地址"
-              variant="outlined"
-              value={inputText}
-              onChange={(e) => setInputText(e.target.value)}
-              sx={{ mb: 2, mt: 2 }}
-            />
-          )}
-        </>
-      )}
+          <Fade in={importOption === "uploadFile"} timeout={500}>
+            <Box sx={{ display: importOption === "uploadFile" ? 'block' : 'none' }}>
+              <Paper
+                elevation={0}
+                sx={{
+                  p: 4,
+                  mb: 3,
+                  borderRadius: 2,
+                  backgroundColor: theme.palette.background.paper,
+                  border: `2px dashed ${theme.palette.primary.light}`,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  cursor: 'pointer'
+                }}
+              >
+                <UploadFile sx={{ fontSize: 48, color: theme.palette.primary.main, mb: 2 }} />
+                <Typography variant="h6" color="primary" gutterBottom>
+                  点击或拖拽文件到此处
+                </Typography>
+                <Typography variant="body2" color="textSecondary">
+                  支持 PDF, DOCX, TXT 等格式
+                </Typography>
+              </Paper>
+            </Box>
+          </Fade>
+
+          <Fade in={importOption === "inputUrl"} timeout={500}>
+            <Box sx={{ display: importOption === "inputUrl" ? 'block' : 'none' }}>
+              <TextField
+                fullWidth
+                label="请输入网页地址"
+                variant="outlined"
+                value={inputText}
+                onChange={(e) => setInputText(e.target.value)}
+                sx={{ 
+                  mb: 3,
+                  '& .MuiOutlinedInput-root': {
+                    borderRadius: 2,
+                    '&:hover .MuiOutlinedInput-notchedOutline': {
+                      borderColor: theme.palette.primary.light
+                    }
+                  }
+                }}
+                placeholder="https://example.com"
+                helperText="系统将抓取网页内容并生成PPT大纲"
+              />
+            </Box>
+          </Fade>
+
+          <Fade in={importOption === "importOutline"} timeout={500}>
+            <Box sx={{ display: importOption === "importOutline" ? 'block' : 'none' }}>
+              <TextField
+                fullWidth
+                label="请输入大纲内容"
+                variant="outlined"
+                multiline
+                rows={4}
+                value={inputText}
+                onChange={(e) => setInputText(e.target.value)}
+                sx={{ 
+                  mb: 3,
+                  '& .MuiOutlinedInput-root': {
+                    borderRadius: 2,
+                    '&:hover .MuiOutlinedInput-notchedOutline': {
+                      borderColor: theme.palette.primary.light
+                    }
+                  }
+                }}
+                placeholder="第一章: 介绍\n1.1 背景\n1.2 目标\n第二章: 内容..."
+                helperText="请按照章节格式输入大纲内容"
+              />
+            </Box>
+          </Fade>
+        </Box>
+      </Fade>
 
       {/* 更多生成要求 */}
-      <Button
-        variant="text"
-        color="primary"
-        onClick={toggleMoreOptions}
-        sx={{ cursor: "pointer", mb: 2 }}
-        endIcon={
-          showMoreOptions ? (
-            <KeyboardArrowRight sx={{ verticalAlign: "middle" }} />
-          ) : (
-            <KeyboardArrowDown sx={{ verticalAlign: "middle" }} />
-          )
-        }
+      <Paper 
+        elevation={0} 
+        sx={{ 
+          p: 0.5, 
+          mb: 3, 
+          borderRadius: 2,
+          backgroundColor: theme.palette.background.paper
+        }}
       >
-        更多生成要求
-      </Button>
+        <Button
+          fullWidth
+          variant="text"
+          color="primary"
+          onClick={toggleMoreOptions}
+          sx={{ 
+            cursor: "pointer", 
+            borderRadius: 2,
+            py: 1,
+            display: 'flex',
+            justifyContent: 'space-between'
+          }}
+          startIcon={<Settings />}
+          endIcon={
+            showMoreOptions ? (
+              <KeyboardArrowRight />
+            ) : (
+              <KeyboardArrowDown />
+            )
+          }
+        >
+          <Typography variant="subtitle1" sx={{ fontWeight: 500 }}>
+            更多生成要求
+          </Typography>
+        </Button>
+      </Paper>
 
-      {showMoreOptions && (
-        <Box sx={{ mb: 2 }}>
-          <TextField
-            fullWidth
-            size={"small"}
-            label="请输入更多要求"
-            variant="outlined"
-            value={moreOptions.moreRequirement}
-            onChange={(e) =>
-              setMoreOptions({ ...moreOptions, moreRequirement: e.target.value })
-            }
-            sx={{ mb: 2 }}
-          />
-          {/* 大纲篇幅选择 */}
-          <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-            <Typography variant="body1">大纲篇幅:</Typography>
-            <Select
-              size={'small'}
-              value={moreOptions.outlineLength}
-              onChange={(e) =>
-                setMoreOptions({ ...moreOptions, outlineLength: e.target.value })
-              }
-              displayEmpty
-              sx={{my: 1}}
-            >
-              <MenuItem value="" disabled>
-                请选择
-              </MenuItem>
-              <MenuItem value="short">较短 10-15 页</MenuItem>
-              <MenuItem value="regular">常规 20-30 页</MenuItem>
-              <MenuItem value="long">更长 25-35 页</MenuItem>
-            </Select>
-          </Box>
-          {/* 下拉框和文本提示 */}
-          <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-            <Typography variant="body1">选择语言:</Typography>
-            <Select
-              size={"small"}
-              value={moreOptions.language}
-              onChange={(e) =>
-                setMoreOptions({ ...moreOptions, language: e.target.value })
-              }
-              displayEmpty
-              sx={{my: 1}}
-            >
-              <MenuItem value="" disabled>
-                请选择
-              </MenuItem>
-              <MenuItem value="zh-CN">中文</MenuItem>
-              <MenuItem value="en">英文</MenuItem>
-            </Select>
-          </Box>
-        </Box>
-      )}
-
-      <Grid container justifyContent="center">
-        <Grid item>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={handleGenerateOutline}
-            startIcon={<PlayCircleFilled />}
+      <Fade in={showMoreOptions} timeout={500}>
+        <Box sx={{ display: showMoreOptions ? 'block' : 'none', mb: 3 }}>
+          <Paper 
+            elevation={0} 
+            sx={{ 
+              p: 3, 
+              borderRadius: 2,
+              backgroundColor: theme.palette.background.paper
+            }}
           >
-            立即生成
-          </Button>
-        </Grid>
-      </Grid>
+            <TextField
+              fullWidth
+              size="small"
+              label="请输入更多要求"
+              variant="outlined"
+              value={moreOptions.moreRequirement}
+              onChange={(e) =>
+                setMoreOptions({ ...moreOptions, moreRequirement: e.target.value })
+              }
+              sx={{ 
+                mb: 3,
+                '& .MuiOutlinedInput-root': {
+                  borderRadius: 2
+                }
+              }}
+              placeholder="例如：包含数据图表、案例分析等"
+            />
+            
+            {/* 大纲篇幅选择 */}
+            <Box sx={{ 
+              display: "flex", 
+              alignItems: "center", 
+              gap: 2, 
+              mb: 2,
+              flexWrap: 'wrap'
+            }}>
+              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <FormatSize sx={{ color: theme.palette.primary.main, mr: 1 }} />
+                <Typography variant="body1" sx={{ fontWeight: 500 }}>大纲篇幅:</Typography>
+              </Box>
+              <Select
+                size="small"
+                value={moreOptions.outlineLength}
+                onChange={(e) =>
+                  setMoreOptions({ ...moreOptions, outlineLength: e.target.value as string })
+                }
+                displayEmpty
+                sx={{
+                  minWidth: 150,
+                  borderRadius: 2,
+                  '& .MuiOutlinedInput-notchedOutline': {
+                    borderColor: theme.palette.primary.light
+                  }
+                }}
+              >
+                <MenuItem value="" disabled>
+                  请选择
+                </MenuItem>
+                <MenuItem value="short">较短 10-15 页</MenuItem>
+                <MenuItem value="regular">常规 20-30 页</MenuItem>
+                <MenuItem value="long">更长 25-35 页</MenuItem>
+              </Select>
+            </Box>
+            
+            {/* 语言选择 */}
+            <Box sx={{ 
+              display: "flex", 
+              alignItems: "center", 
+              gap: 2,
+              flexWrap: 'wrap'
+            }}>
+              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <Language sx={{ color: theme.palette.primary.main, mr: 1 }} />
+                <Typography variant="body1" sx={{ fontWeight: 500 }}>选择语言:</Typography>
+              </Box>
+              <Select
+                size="small"
+                value={moreOptions.language}
+                onChange={(e) =>
+                  setMoreOptions({ ...moreOptions, language: e.target.value as string })
+                }
+                displayEmpty
+                sx={{
+                  minWidth: 150,
+                  borderRadius: 2,
+                  '& .MuiOutlinedInput-notchedOutline': {
+                    borderColor: theme.palette.primary.light
+                  }
+                }}
+              >
+                <MenuItem value="" disabled>
+                  请选择
+                </MenuItem>
+                <MenuItem value="zh-CN">中文</MenuItem>
+                <MenuItem value="en">英文</MenuItem>
+              </Select>
+            </Box>
+          </Paper>
+        </Box>
+      </Fade>
+
+      <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
+        <Button
+          variant="contained"
+          color="primary"
+          size="large"
+          onClick={handleGenerateOutline}
+          startIcon={<PlayCircleFilled />}
+          sx={{ 
+            borderRadius: 8,
+            px: 4,
+            py: 1.5,
+            boxShadow: theme.shadows[4],
+            '&:hover': {
+              boxShadow: theme.shadows[8]
+            },
+            transition: 'all 0.3s ease'
+          }}
+        >
+          立即生成
+        </Button>
+      </Box>
 
     </Box>
   )

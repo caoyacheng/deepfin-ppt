@@ -53,9 +53,9 @@ const DefaultPalette = (mode: PaletteMode, skin: Skin, themeColor: ThemeColor) =
       white: whiteColor
     },
     primary: {
-      light: '#9E69FD',
-      main: '#9155FD',
-      dark: '#804BDF',
+      light: '#4D8FD6',
+      main: '#1976D2',
+      dark: '#0D5CAB',
       contrastText: whiteColor
     },
     secondary: {
