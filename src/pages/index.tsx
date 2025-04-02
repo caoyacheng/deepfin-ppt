@@ -56,7 +56,7 @@ const AiPPTXModel = () => {
               easing: theme.transitions.easing.sharp,
               duration: theme.transitions.duration.enteringScreen
             }),
-            background: 'linear-gradient(90deg,rgb(29, 14, 96) 0%,rgb(1, 6, 48) 100%)',
+            background: 'linear-gradient(90deg,rgb(49, 45, 75) 0%,rgb(40, 37, 61) 100%)',
             color: 'white',
             overflowX: 'hidden'
           }
