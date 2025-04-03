@@ -60,10 +60,20 @@ const Drawer = (props: Props) => {
   const { navCollapsed } = settings
 
   const drawerColors = () => {
-    return {
-      background: 'linear-gradient(180deg, #e6d8f2 0%, #c8b0e6 100%)',
-      '& .MuiTypography-root, & svg': {
-        color: `rgba(${theme.palette.customColors.dark}, 0.87)`
+    // 根据主题模式返回不同的背景颜色
+    if (settings.mode === 'light') {
+      return {
+        background: 'linear-gradient(180deg, #e6d8f2 0%, #c8b0e6 100%)',
+        '& .MuiTypography-root, & svg': {
+          color: `rgba(${theme.palette.customColors.dark}, 0.87)`
+        }
+      }
+    } else {
+      return {
+        background: 'linear-gradient(180deg, #3b2d5c 0%, #2a1f42 100%)',
+        '& .MuiTypography-root, & svg': {
+          color: `rgba(${theme.palette.customColors.light}, 0.87)`
+        }
       }
     }
   }

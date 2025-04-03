@@ -6,6 +6,7 @@ import IconButton from '@mui/material/IconButton'
 import Box, { BoxProps } from '@mui/material/Box'
 import { styled, useTheme } from '@mui/material/styles'
 import Typography, { TypographyProps } from '@mui/material/Typography'
+import Tooltip from '@mui/material/Tooltip'
 
 // ** Type Import
 import { LayoutProps } from 'src/@core/layouts/types'
@@ -90,6 +91,11 @@ const VerticalNavHeader = (props: Props) => {
 
   const MenuUnlockedIcon = () => userMenuUnlockedIcon || <Icon icon='mdi:radiobox-blank' />
 
+  // 切换主题模式
+  const toggleThemeMode = () => {
+    saveSettings({ ...settings, mode: settings.mode === 'light' ? 'dark' : 'light' })
+  }
+
   return (
     <MenuHeaderWrapper className='nav-header' sx={{ pl: menuHeaderPaddingLeft() }}>
       {userNavMenuBranding ? (
@@ -161,34 +167,52 @@ const VerticalNavHeader = (props: Props) => {
         </StyledLink>
       )}
 
-      {hidden ? (
-        <IconButton
-          disableRipple
-          disableFocusRipple
-          onClick={toggleNavVisibility}
-          sx={{ p: 0, backgroundColor: 'transparent !important' }}
-        >
-          <Icon icon='mdi:close' fontSize={20} />
-        </IconButton>
-      ) : userMenuLockedIcon === null && userMenuUnlockedIcon === null ? null : (
-        <IconButton
-          disableRipple
-          disableFocusRipple
-          onClick={() => saveSettings({ ...settings, navCollapsed: !navCollapsed })}
-          sx={{
-            p: 0,
-            color: 'text.primary',
-            backgroundColor: 'transparent !important',
-            '& svg': {
-              fontSize: '1.25rem',
+      <Box sx={{ display: 'flex', alignItems: 'center' }}>
+        {hidden ? (
+          <IconButton
+            disableRipple
+            disableFocusRipple
+            onClick={toggleNavVisibility}
+            sx={{ p: 0, backgroundColor: 'transparent !important' }}
+          >
+            <Icon icon='mdi:close' fontSize={20} />
+          </IconButton>
+        ) : userMenuLockedIcon === null && userMenuUnlockedIcon === null ? null : (
+          <IconButton
+            disableRipple
+            disableFocusRipple
+            onClick={() => saveSettings({ ...settings, navCollapsed: !navCollapsed })}
+            sx={{
+              p: 0,
+              color: 'text.primary',
+              backgroundColor: 'transparent !important',
+              '& svg': {
+                fontSize: '1.25rem',
+                ...menuCollapsedStyles,
+                transition: 'opacity .25s ease-in-out'
+              }
+            }}
+          >
+            {navCollapsed ? MenuUnlockedIcon() : MenuLockedIcon()}
+          </IconButton>
+        )}
+        
+        {/* 主题切换按钮 */}
+        <Tooltip title={settings.mode === 'light' ? '切换到暗色模式' : '切换到亮色模式'}>
+          <IconButton
+            color='inherit'
+            onClick={toggleThemeMode}
+            sx={{
+              ml: 1,
+              color: 'text.primary',
               ...menuCollapsedStyles,
               transition: 'opacity .25s ease-in-out'
-            }
-          }}
-        >
-          {navCollapsed ? MenuUnlockedIcon() : MenuLockedIcon()}
-        </IconButton>
-      )}
+            }}
+          >
+            <Icon icon={settings.mode === 'light' ? 'mdi:weather-night' : 'mdi:weather-sunny'} fontSize={20} />
+          </IconButton>
+        </Tooltip>
+      </Box>
     </MenuHeaderWrapper>
   )
 }
